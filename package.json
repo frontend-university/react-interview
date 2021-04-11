@@ -9,6 +9,11 @@
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "typings": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/youngjuning/react-interview.git",
+    "branch": "main"
+  },
   "gitHooks": {
     "pre-commit": "lint-staged"
   },

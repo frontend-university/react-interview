@@ -13,11 +13,7 @@ export default defineConfig({
     null,
     {
       title: 'GitHub',
-      path: 'https://github.com/youngjuning/react-interview-juejin-book',
-    },
-    {
-      title: '掘金',
-      path: 'https://juejin.cn/book/6930520122717601806',
+      path: 'https://github.com/youngjuning/react-interview',
     },
   ],
   base: '/react-interview',
