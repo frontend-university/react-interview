@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - uses: c-hive/gha-yarn-cache@v1
       - run: yarn install
       - run: yarn build
       - name: Deploy
