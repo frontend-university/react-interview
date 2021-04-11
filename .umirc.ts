@@ -20,5 +20,7 @@ export default defineConfig({
       path: 'https://juejin.cn/book/6930520122717601806',
     },
   ],
+  base: '/react-interview',
+  publicPath: '/react-interview/',
   // more config: https://d.umijs.org/config
 });
