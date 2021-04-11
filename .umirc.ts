@@ -12,8 +12,16 @@ export default defineConfig({
   navs: [
     null,
     {
+      title: '洛竹早茶馆',
+      path: 'https://youngjuning.js.org/',
+    },
+    {
       title: 'GitHub',
       path: 'https://github.com/youngjuning/react-interview',
+    },
+    {
+      title: '掘金',
+      path: 'https://juejin.cn/user/325111174662855/posts',
     },
   ],
   base: '/react-interview',
