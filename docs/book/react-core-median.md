@@ -3,13 +3,13 @@ title: React 核心中
 order: 2
 ---
 
-### 1. What is reconciliation?
+### 1. 协调（reconciliation）是什么？
 
-When a component's props or state change, React decides whether an actual DOM update is necessary by comparing the newly returned element with the previously rendered one. When they are not equal, React will update the DOM. This process is called _reconciliation_.
+当一个组件的 props 或 state 发生变化时，React 通过比较新返回的元素和之前渲染的元素来决定是否有必要进行实际的 DOM 更新。当它们不相等时，React 将更新 DOM。这个过程被称为 _协调（reconciliation）_。
 
-### 2. How to set state with a dynamic key name?
+### 2. 如何用一个动态键名来设置状态？
 
-If you are using ES6 or the Babel transpiler to transform your JSX code then you can accomplish this with _computed property names_.
+如果你使用 ES6 或 Babel 转码器来转换你的 JSX 代码，那么你可以用计算属性命名完成。
 
 ```javascript
 handleInputChange(event) {
@@ -17,31 +17,31 @@ handleInputChange(event) {
 }
 ```
 
-### 3. What would be the common mistake of function being called every time the component renders?
+### 3. 每次组件渲染时，函数被调用的常见错误是什么？
 
-You need to make sure that function is not being called while passing the function as a parameter.
+你需要确保在传递函数作为参数时，没有调用该函数。
 
 ```jsx | pure
 render() {
-  // Wrong: handleClick is called instead of passed as a reference!
+  // 错误❌： handleClick 被调用而不是作为引用被传入
   return <button onClick={this.handleClick()}>{'Click Me'}</button>
 }
 ```
 
-Instead, pass the function itself without parenthesis:
+取而代之的是传递函数本身，不加圆括号。
 
 ```jsx | pure
 render() {
-  // Correct: handleClick is passed as a reference!
+  // 正确：handleClick 是作为一个引用传递的!
   return <button onClick={this.handleClick}>{'Click Me'}</button>
 }
 ```
 
-### 4. Is lazy function supports named exports?
+### 4. lazy 函数是否支持命名导出？
 
-No, currently `React.lazy` function supports default exports only. If you would like to import modules which are named exports, you can create an intermediate module that reexports it as the default. It also ensures that tree shaking keeps working and don’t pull unused components.
+不，目前 `React.lazy` 函数只支持默认出口。如果你想导入被命名导出的模块，你可以创建一个中间模块，将其作为默认出口。这也保证了摇树的工作，不会拉取未使用的组件。
 
-Let's take a component file which exports multiple named components,
+让我们来看看一个导出多个命名组件的组件文件。
 
 ```javascript
 // MoreComponents.js
@@ -49,23 +49,23 @@ export const SomeComponent = /* ... */;
 export const UnusedComponent = /* ... */;
 ```
 
-and reexport `MoreComponents.js` components in an intermediate file `IntermediateComponent.js`
+并在一个中间文件 `IntermediateComponent.js` 中重新导出 `MoreComponents.js` 组件
 
 ```javascript
 // IntermediateComponent.js
 export { SomeComponent as default } from './MoreComponents.js';
 ```
 
-Now you can import the module using lazy function as below,
+现在你可以使用下面的 lazy 函数导入该模块。
 
 ```javascript
 import React, { lazy } from 'react';
 const SomeComponent = lazy(() => import('./IntermediateComponent.js'));
 ```
 
-### 5. Why React uses `className` over `class` attribute?
+### 5. 为什么 React 使用 `className` 而不是 `class` 属性？
 
-`class` is a keyword in JavaScript, and JSX is an extension of JavaScript. That's the principal reason why React uses `className` instead of `class`. Pass a string as the `className` prop.
+`class` 是 JavaScript 的一个关键字，而 JSX 是 JavaScript 的一个扩展。这就是为什么 React 使用 `className` 而不是 `class` 的主要原因。传递一个字符串作为 `className` prop。
 
 ```jsx | pure
 render() {
@@ -73,9 +73,9 @@ render() {
 }
 ```
 
-### 6. What are fragments?
+### 6. 片段（fragments）是什么？
 
-It's common pattern in React which is used for a component to return multiple elements. _Fragments_ let you group a list of children without adding extra nodes to the DOM.
+这是 React 中常见的模式，用于一个组件返回多个元素。片段让你可以对一个 children 的列表进行分组，而无需在 DOM 中添加额外的节点。
 
 ```jsx | pure
 render() {
@@ -89,7 +89,7 @@ render() {
 }
 ```
 
-There is also a _shorter syntax_, but it's not supported in many tools:
+这里还有一个短语法可以用，但是很多工具不支持：
 
 ```jsx | pure
 render() {
@@ -103,34 +103,33 @@ render() {
 }
 ```
 
-### 7. Why fragments are better than container divs?
+### 7. 为什么片段（fragments）比 div 容器要好？
 
-Below are the list of reasons,
+1. 片段的速度更快一些，并且由于没有创建额外的 DOM 节点而使用更少的内存。这只有在非常大和深的树上才会体现出真正的好处。
+2. 一些 CSS 机制，如 Flexbox 和 CSS Grid 有一个特殊的父子关系，在中间添加 div 会使其难以保持所需的布局。
+3. DOM 检查器不那么杂乱。
 
-1. Fragments are a bit faster and use less memory by not creating an extra DOM node. This only has a real benefit on very large and deep trees.
-2. Some CSS mechanisms like _Flexbox_ and _CSS Grid_ have a special parent-child relationships, and adding divs in the middle makes it hard to keep the desired layout.
-3. The DOM Inspector is less cluttered.
+### 8. 什么是 React 中的传递门（Portal）？
 
-### 8. What are portals in React?
-
-_Portal_ is a recommended way to render children into a DOM node that exists outside the DOM hierarchy of the parent component.
+传递门是一种推荐的方式，可以将子节点渲染到父组件的 DOM 层次结构之外的 DOM 节点中。
 
 ```javascript
 ReactDOM.createPortal(child, container);
 ```
 
-The first argument is any render-able React child, such as an element, string, or fragment. The second argument is a DOM element.
+第一个参数是任何可渲染的 React children，比如一个元素、字符串或片段。第二个参数是一个 DOM 元素。
 
-### 9. What are stateless components?
+### 9. 什么是无状态组件?
 
-If the behaviour is independent of its state then it can be a stateless component. You can use either a function or a class for creating stateless components. But unless you need to use a lifecycle hook in your components, you should go for function components. There are a lot of benefits if you decide to use function components here; they are easy to write, understand, and test, a little faster, and you can avoid the `this` keyword altogether.
+如果行为是独立于其状态的，那么它可以是一个无状态组件。你可以使用函数或类来创建无状态组件。但除非你需要在你的组件中使用生命周期钩子，否则你应该选择函数组件。如果你决定在这里使用函数组件，会有很多好处；它们易于编写、理解和测试，速度稍快，而且你可以完全避免使用 `this` 关键字。
 
-### 10. What are stateful components?
+### 10. 什么是状态组件?
 
-If the behaviour of a component is dependent on the _state_ of the component then it can be termed as stateful component. These _stateful components_ are always _class components_ and have a state that gets initialized in the `constructor`.
+如果一个组件的行为依赖于该组件的状态（state），那么它可以被称为有状态的组件。这些有状态的组件总是类组件，并且有一个在构造器（`constructor`）中被初始化的状态。
 
 ```javascript
 class App extends Component {
+  // 也可以使用类字段语法
   constructor(props) {
     super(props);
     this.state = { count: 0 };
@@ -142,11 +141,11 @@ class App extends Component {
 }
 ```
 
-**React 16.8 Update:**
+**React 16.8 更新：**
 
-Hooks let you use state and other React features without writing classes.
+Hooks 让你在不写类的情况下使用状态和其他 React 功能。
 
-_The Equivalent Functional Component_
+等效的函数组件
 
 ```javascript
 import React, {useState} from 'react';
@@ -160,11 +159,11 @@ const App = (props) => {
 }
 ```
 
-### 11. How to apply validation on props in React?
+### 11. 如何在 React 中对 props 进行验证？
 
-When the application is running in _development mode_, React will automatically check all props that we set on components to make sure they have _correct type_. If the type is incorrect, React will generate warning messages in the console. It's disabled in _production mode_ due to performance impact. The mandatory props are defined with `isRequired`.
+当应用程序运行在开发模式时，React 会自动检查我们在组件上设置的所有 props，以确保它们具有正确的类型。如果类型不正确，React 会在控制台生成警告信息。由于对性能的影响，它在生产模式中被禁用。必需 props 是用 `isRequired` 定义的。
 
-The set of predefined prop types:
+预定义的 props 类型集合。
 
 1. `PropTypes.number`
 2. `PropTypes.string`
@@ -177,7 +176,7 @@ The set of predefined prop types:
 9. `PropTypes.symbol`
 10. `PropTypes.any`
 
-We can define `propTypes` for `User` component as below:
+我们可以为 `User` 组件定义 `propTypes`，如下所示。
 
 ```jsx | pure
 import React from 'react';
@@ -200,9 +199,9 @@ class User extends React.Component {
 }
 ```
 
-**Note:** In React v15.5 _PropTypes_ were moved from `React.PropTypes` to `prop-types` library.
+> 注意：在 React v15.5 中，`PropTypes` 被从 `React.PropTypes` 移到 `prop-types`库中。
 
-_The Equivalent Functional Component_
+等效的函数式组件：
 
 ```jsx | pure
 import React from 'react';
@@ -223,31 +222,31 @@ User.propTypes = {
 };
 ```
 
-### 12. What are the advantages of React?
+### 12. React 的优势是什么？
 
-Below are the list of main advantages of React,
+以下是 React的 主要优势。
 
-1. Increases the application's performance with _Virtual DOM_.
-2. JSX makes code easy to read and write.
-3. It renders both on client and server side (_SSR_).
-4. Easy to integrate with frameworks (Angular, Backbone) since it is only a view library.
-5. Easy to write unit and integration tests with tools such as Jest.
+1. 通过虚拟 DOM 提高应用程序的性能。
+2. JSX 使代码易于阅读和编写。
+3. 它在客户端和服务器端都能进行渲染（SSR）。
+4. 易于与框架（Angular, Backbone）集成，因为它只是一个视图库。
+5. 使用 Jest 等工具容易编写单元和集成测试。
 
-### 13. What are the limitations of React?
+### 13. React 的局限性是什么？
 
-Apart from the advantages, there are few limitations of React too,
+除了优点之外，React 也有一些限制。
 
-1. React is just a view library, not a full framework.
-2. There is a learning curve for beginners who are new to web development.
-3. Integrating React into a traditional MVC framework requires some additional configuration.
-4. The code complexity increases with inline templating and JSX.
-5. Too many smaller components leading to over engineering or boilerplate.
+1. React 只是一个视图库，不是一个完整的框架。
+2. 对于刚接触网络开发的初学者来说，有一个学习曲线。
+3. 将 React 整合到传统的 MVC 框架中需要一些额外的配置。
+4. 代码的复杂性随着内联模板和 JSX 的增加而增加。
+5. 太多的小组件导致了过度工程化或模板化。
 
-### 14. What are error boundaries in React v16?
+### 14. 什么是 React v16 中的错误边界（Error Boundary）？
 
-_Error boundaries_ are components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed.
+错误边界是指在其子组件树的任何地方捕获 JavaScript 错误的组件，记录这些错误，并显示一个后备 UI ，而不是崩溃的组件树。
 
-A class component becomes an error boundary if it defines a new lifecycle method called `componentDidCatch(error, info)` or `static getDerivedStateFromError()`:
+如果一个类组件定义了一个新的生命周期方法 `componentDidCatch(error, info)` 或 `static getDerivedStateFromError()` ，它就成为一个错误边界。
 
 ```jsx | pure
 class ErrorBoundary extends React.Component {
@@ -257,26 +256,26 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
-    // You can also log the error to an error reporting service
-    logErrorToMyService(error, info);
+    // 你也可以把错误记录到一个错误报告服务中去
+    logErrorToMyService(error, info)。
   }
 
   static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI.
+    // 更新状态，以便下次渲染时显示回退的用户界面。
     return { hasError: true };
   }
 
   render() {
     if (this.state.hasError) {
-      // You can render any custom fallback UI
+      // 你可以渲染任何自定义的回退用户界面
       return <h1>{'Something went wrong.'}</h1>;
     }
-    return this.props.children;
+    return this.props.children。
   }
 }
 ```
 
-After that use it as a regular component:
+之后把它作为一个普通的组件使用。
 
 ```jsx | pure
 <ErrorBoundary>
@@ -284,17 +283,17 @@ After that use it as a regular component:
 </ErrorBoundary>
 ```
 
-### 15. How error boundaries handled in React v15?
+### 15. React v15 中是如何处理错误边界的？
 
-React v15 provided very basic support for _error boundaries_ using `unstable_handleError` method. It has been renamed to `componentDidCatch` in React v16.
+React v15 使用 `unstable_handleError` 方法为错误边界提供了非常基本的支持。在 React v16 中，它已经被重新命名为 `componentDidCatch`。
 
-### 16.What are the recommended ways for static type checking?
+### 16. 静态类型检查的推荐方式是什么？
 
-Normally we use _PropTypes library_ (`React.PropTypes` moved to a `prop-types` package since React v15.5) for _type checking_ in the React applications. For large code bases, it is recommended to use _static type checkers_ such as Flow or TypeScript, that perform type checking at compile time and provide auto-completion features.
+通常我们使用 PropTypes 库（`React.PropTypes` 从 React v15.5 开始转移到 `prop-types` 包）来进行 React 应用中的类型检查。对于大型代码库，建议使用静态类型检查器，如 Flow 或 TypeScript，在编译时进行类型检查并提供自动补全功能。
 
-### 17. What is the use of `react-dom` package?
+### 17. `react-dom` 包有什么用？
 
-The `react-dom` package provides _DOM-specific methods_ that can be used at the top level of your app. Most of the components are not required to use this module. Some of the methods of this package are:
+`react-dom` 包提供了 DOM 特定的方法，可以在你的应用程序的顶层使用。大多数组件不需要使用此模块。这个包的一些方法是：
 
 1. `render()`
 2. `hydrate()`
@@ -302,27 +301,27 @@ The `react-dom` package provides _DOM-specific methods_ that can be used at the 
 4. `findDOMNode()`
 5. `createPortal()`
 
-### 18. What is the purpose of render method of `react-dom`?
+### 18. `react-dom` 的 render 方法的目的是什么？
 
-This method is used to render a React element into the DOM in the supplied container and return a reference to the component. If the React element was previously rendered into container, it will perform an update on it and only mutate the DOM as necessary to reflect the latest changes.
+此方法用于将 React 元素渲染到提供的容器中的 DOM 中，并返回对组件的引用。如果 React 元素之前已渲染到容器中，它将对其执行更新，并且仅在必要时更改 DOM 以反映最新更改。
 
 ```jsx | pure
 ReactDOM.render(element, container[, callback])
 ```
 
-If the optional callback is provided, it will be executed after the component is rendered or updated.
+如果提供了可选的回调，它将在组件渲染或更新后执行。
 
-### 19. What is ReactDOMServer?
+### 19. 什么是 ReactDOMServer？
 
-The `ReactDOMServer` object enables you to render components to static markup (typically used on node server). This object is mainly used for _server-side rendering_ (SSR). The following methods can be used in both the server and browser environments:
+`ReactDOMServer` 对象使你能够将组件呈现为静态标记（通常用于节点服务器）。该对象主要用于服务器端渲染（SSR）。以下方法可用于服务器和浏览器环境：
 
 1. `renderToString()`
 2. `renderToStaticMarkup()`
 
-For example, you generally run a Node-based web server like Express, Hapi, or Koa, and you call `renderToString` to render your root component to a string, which you then send as response.
+例如，你通常运行基于 Node 的 Web 服务器（如 Express、Hapi 或 Koa），然后调用 `renderToString` 将根组件渲染为字符串，然后将其作为响应发送。
 
 ```javascript
-// using Express
+// 使用 Express
 import { renderToString } from 'react-dom/server';
 import MyPage from './MyPage';
 
@@ -335,11 +334,11 @@ app.get('/', (req, res) => {
 });
 ```
 
-### 20. How to use innerHTML in React?
+### 20. 如何在 React 中使用 innerHTML？
 
-The `dangerouslySetInnerHTML` attribute is React's replacement for using `innerHTML` in the browser DOM. Just like `innerHTML`, it is risky to use this attribute considering cross-site scripting (XSS) attacks. You just need to pass a `__html` object as key and HTML text as value.
+`dangerouslySetInnerHTML` 属性是 React 在浏览器 DOM 中使用 `innerHTML` 的替代品。就像 `innerHTML` 一样，考虑到跨站点脚本 (XSS) 攻击，使用此属性是有风险的。你只需要传递一个 `__html` 对象作为键和 HTML 文本作为值。
 
-In this example MyComponent uses `dangerouslySetInnerHTML` attribute for setting HTML markup:
+在这个例子中，MyComponent 使用 `dangerouslySetInnerHTML` 属性来设置 HTML 标记：
 
 ```jsx | pure
 function createMarkup() {
