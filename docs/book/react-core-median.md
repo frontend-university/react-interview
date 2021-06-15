@@ -350,14 +350,14 @@ function MyComponent() {
 }
 ```
 
-### 21. How to use styles in React?
+### 21. 如何在 React 使用样式？
 
-The `style` attribute accepts a JavaScript object with camelCased properties rather than a CSS string. This is consistent with the DOM style JavaScript property, is more efficient, and prevents XSS security holes.
+`style` 属性接受一个小驼峰命名法属性的 JavaScript 对象，而不是一个 CSS 字符串。这与 DOM 风格的 JavaScript 属性一致，更有效率，并能防止 XSS 安全漏洞。
 
 ```jsx | pure
 const divStyle = {
   color: 'blue',
-  backgroundImage: 'url(' + imgUrl + ')',
+  backgroundImage: `url(${imgUrl})`,
 };
 
 function HelloWorldComponent() {
@@ -365,24 +365,26 @@ function HelloWorldComponent() {
 }
 ```
 
-Style keys are camelCased in order to be consistent with accessing the properties on DOM nodes in JavaScript (e.g. `node.style.backgroundImage`).
+样式键名是符合驼峰命名法的，以便与在 JavaScript 中访问 DOM 节点的属性相一致（例如 `node.style.backgroundImage`）。
 
-### 22. How events are different in React?
+### 22. 事件在 React 中有何不同？
 
 Handling events in React elements has some syntactic differences:
 
-1. React event handlers are named using camelCase, rather than lowercase.
-2. With JSX you pass a function as the event handler, rather than a string.
+在 React 元素上处理事件有一些语法上的不同：
 
-### 23. What will happen if you use `setState()` in constructor?
+1. React 事件处理程序使用小驼峰命名，而不是小写。
+2. 使用 JSX，你传递一个函数作为事件处理程序，而不是一个字符串。
 
-When you use `setState()`, then apart from assigning to the object state React also re-renders the component and all its children. You would get error like this: _Can only update a mounted or mounting component._ So we need to use `this.state` to initialize variables inside constructor.
+### 23. 如果你在构造函数中使用 `setState()`，会发生什么？
 
-### 24. What is the impact of indexes as keys?
+当你使用 `setState()` 时，除了分配给对象的状态外，React 还重新渲染组件和它的所有子组件。你会得到这样的错误：只能更新一个已挂载或正在挂载的组件。所以我们需要使用 `this.state` 来初始化构造函数中的变量。
 
-Keys should be stable, predictable, and unique so that React can keep track of elements.
+### 24. 索引作为键的影响是什么？
 
-In the below code snippet each element's key will be based on ordering, rather than tied to the data that is being represented. This limits the optimizations that React can do.
+键应该是稳定的、可预测的和唯一的，这样 React 就可以跟踪元素。
+
+在下面的代码片段中，每个元素的键都是基于索引的，而不是与被表示的数据相联系。这限制了 React 可以做的优化。
 
 ```jsx | pure
 {
@@ -390,7 +392,7 @@ In the below code snippet each element's key will be based on ordering, rather t
 }
 ```
 
-If you use element data for unique key, assuming todo.id is unique to this list and stable, React would be able to reorder elements without needing to reevaluate them as much.
+如果你使用元素数据作为唯一键，假设 `todo.id` 在这个列表中是唯一的，并且是稳定的，React 将能够对元素进行重新排序，而不需要像以前那样重新计算它们。
 
 ```jsx | pure
 {
@@ -398,9 +400,9 @@ If you use element data for unique key, assuming todo.id is unique to this list 
 }
 ```
 
-### 25. Is it good to use `setState()` in `componentWillMount()` method?
+### 25. 在 `componentWillMount()` 方法中使用 `setState` 真的好吗?
 
-Yes, it is safe to use `setState()` inside `componentWillMount()` method. But at the same it is recommended to avoid async initialization in `componentWillMount()` lifecycle method. `componentWillMount()` is invoked immediately before mounting occurs. It is called before `render()`, therefore setting state in this method will not trigger a re-render. Avoid introducing any side-effects or subscriptions in this method. We need to make sure async calls for component initialization happened in `componentDidMount()` instead of `componentWillMount()`.
+是的，在 `componentWillMount()` 方法中使用 `setState()` 是安全的。但同时，建议避免在`componentWillMount()` 生命周期方法中进行异步初始化。`componentWillMount()` 在挂载发生前立即被调用。它在 `render()` 之前被调用，因此在这个方法中设置状态不会触发重新渲染。避免在这个方法中引入任何副作用或订阅。我们需要确保组件初始化的异步调用发生在 `componentDidMount()` 而不是 `componentWillMount()`。
 
 ```jsx | pure
 componentDidMount() {
@@ -412,11 +414,11 @@ componentDidMount() {
 }
 ```
 
-### 26. What will happen if you use props in initial state?
+### 26. 如果你在初始状态下使用 props，会发生什么？
 
-If the props on the component are changed without the component being refreshed, the new prop value will never be displayed because the constructor function will never update the current state of the component. The initialization of state from props only runs when the component is first created.
+如果组件上的 props 被改变而组件没有被刷新，新的 props 值将永远不会被显示，因为构造函数永远不会更新组件的当前状态。来自 props 的状态初始化只在组件第一次被创建时运行。
 
-The below component won't display the updated input value:
+下面这个组件就不会显示更新的输入值。
 
 ```jsx | pure
 class MyComponent extends React.Component {
@@ -435,7 +437,7 @@ class MyComponent extends React.Component {
 }
 ```
 
-Using props inside render method will update the value:
+在 render 方法中使用 props 将更新数值。
 
 ```jsx | pure
 class MyComponent extends React.Component {
@@ -453,9 +455,9 @@ class MyComponent extends React.Component {
 }
 ```
 
-### 27. How do you conditionally render components?
+### 27. 你如何有条件地渲染组件？
 
-In some cases you want to render different components depending on some state. JSX does not render `false` or `undefined`, so you can use conditional _short-circuiting_ to render a given part of your component only if a certain condition is true.
+在某些情况下，你想根据一些状态来渲染不同的组件。JSX 不渲染 `false` 或 `undefined`，所以你可以使用条件性短路来渲染你的组件的某一部分，只有当某个条件为真时。
 
 ```jsx | pure
 const MyComponent = ({ name, address }) => (
@@ -466,7 +468,7 @@ const MyComponent = ({ name, address }) => (
 );
 ```
 
-If you need an `if-else` condition then use _ternary operator_.
+如果你需要一个 `if-else` 条件，则使用三元运算符。
 
 ```jsx | pure
 const MyComponent = ({ name, address }) => (
@@ -477,11 +479,11 @@ const MyComponent = ({ name, address }) => (
 );
 ```
 
-### 28. Why we need to be careful when spreading props on DOM elements?
+### 28. 为什么我们在 DOM 元素上传递 props 时需要谨慎？
 
-When we _spread props_ we run into the risk of adding unknown HTML attributes, which is a bad practice. Instead we can use prop destructuring with `...rest` operator, so it will add only required props.
+当我们传递 props 时，我们会遇到添加未知的 HTML 属性的风险，这是一个不好的做法。相反，我们可以使用带有 `...rest` 操作符的 prop 解构，所以它将只添加需要的 prop。
 
-For example,
+比如说。
 
 ```jsx | pure
 const ComponentA = () => (
@@ -493,9 +495,9 @@ const ComponentB = ({ isDisplay, ...domProps }) => (
 );
 ```
 
-### 29. How you use decorators in React?
+### 29. 如何在 React 中使用装饰器？
 
-You can _decorate_ your _class_ components, which is the same as passing the component into a function. **Decorators** are flexible and readable way of modifying component functionality.
+你可以对你的类组件进行装饰，这与将组件传入一个函数是一样的。**装饰器**是修改组件功能的灵活和可读的方式。
 
 ```jsx | pure
 @setTitle('Profile')
@@ -504,9 +506,7 @@ class Profile extends React.Component {
 }
 
 /*
-title is a string that will be set as a document title
-WrappedComponent is what our decorator will receive when
-put directly above a component class as seen in the example above
+title 是一个字符串，将被设置为文档标题。WrappedComponent 是我们的装饰器在以下情况下会收到的东西直接放在一个组件类上面时，我们的装饰器会收到这样的信息，如上面的例子所示
 */
 const setTitle = title => WrappedComponent => {
   return class extends React.Component {
@@ -521,17 +521,17 @@ const setTitle = title => WrappedComponent => {
 };
 ```
 
-**Note:** Decorators are a feature that didn't make it into ES7, but are currently a _stage 2 proposal_.
+**注意：** 装饰器是一个没有进入 ES7 的功能，但目前是一个第二阶段的建议。
 
-### 30. How do you memoize a component?
+### 30. 如何 memo 化一个组件？
 
-There are memoize libraries available which can be used on function components.
+有一些可用的缓存库，可以用于函数组件。
 
-For example `moize` library can memoize the component in another component.
+例如，`moize` 库可以在另一个组件中对组件进行 memo 化。
 
 ```jsx | pure
 import moize from 'moize';
-import Component from './components/Component'; // this module exports a non-memoized component
+import Component from './components/Component'; // 本模块导出一个非 memo 组件
 
 const MemoizedFoo = moize.react(Component);
 
@@ -543,84 +543,84 @@ const Consumer = () => {
 };
 ```
 
-**Update:** Since React v16.6.0, we have a `React.memo`. It provides a higher order component which memoizes component unless the props change. To use it, simply wrap the component using React.memo before you use it.
+**更新：** 从 React v16.6.0 开始，我们有一个 `React.memo`。它提供了一个更高阶的组件，除非 props 发生变化，否则会将组件缓存。要使用它，只需在使用前用 `React.memo` 包住组件。
 
 ```js
 const MemoComponent = React.memo(function MemoComponent(props) {
   /* render using props */
 });
-// OR
+// 或者
 export default React.memo(MyFunctionComponent);
 ```
 
-### 31. How you implement Server Side Rendering or SSR?
+### 31. 你如何实现服务器端渲染或SSR？
 
-React is already equipped to handle rendering on Node servers. A special version of the DOM renderer is available, which follows the same pattern as on the client side.
+React 已经具备了在 Nod e服务器上处理渲染的能力。有一个特殊版本的 DOM 渲染器，它与客户端的模式相同。
 
 ```jsx | pure
 import ReactDOMServer from 'react-dom/server';
 import App from './App';
 
-ReactDOMServer.renderToString(<App />);
+ReactDOMServer.renderToString(<App />)。
 ```
 
-This method will output the regular HTML as a string, which can be then placed inside a page body as part of the server response. On the client side, React detects the pre-rendered content and seamlessly picks up where it left off.
+这个方法将把常规的 HTML 输出为一个字符串，然后可以作为服务器响应的一部分放在页面主体内。在客户端，React 检测到预渲染的内容，并无缝地衔接该内容。
 
-### 32. How to enable production mode in React?
+### 32. 如何在 React 中启用生产模式？
 
-You should use Webpack's `DefinePlugin` method to set `NODE_ENV` to `production`, by which it strip out things like propType validation and extra warnings. Apart from this, if you minify the code, for example, Uglify's dead-code elimination to strip out development only code and comments, it will drastically reduce the size of your bundle.
+你应该使用 Webpack 的 `DefinePlugin` 方法来设置 `NODE_ENV` 为 `production`，通过它来剥离诸如 propType 验证和额外警告的东西。除此之外，如果你对代码进行最小化处理，例如 Uglify 的无效代码消除法，剥离出只用于开发的代码和注释，这将极大地减少你的包的大小。
 
-### 33. What is CRA and its benefits?
+### 33. 什么是 CRA 以及它的好处？
 
-The `create-react-app` CLI tool allows you to quickly create & run React applications with no configuration step.
+`create-react-app` CLI 工具允许你快速创建和运行React应用程序，无需配置步骤。
 
-Let's create Todo App using _CRA_:
+让我们使用 CRA 创建 Todo 应用程序。
 
 ```console
-# Installation
+# 安装
 $ npm install -g create-react-app
 
-# Create new project
+# 创建新项目
 $ create-react-app todo-app
 $ cd todo-app
 
-# Build, test and run
+# 构建、测试、运行
 $ npm run build
 $ npm run test
 $ npm start
 ```
 
-It includes everything we need to build a React app:
+它包括我们建立一个 React 应用程序所需要的一切。
 
-1. React, JSX, ES6, and Flow syntax support.
-2. Language extras beyond ES6 like the object spread operator.
-3. Autoprefixed CSS, so you don’t need -webkit- or other prefixes.
-4. A fast interactive unit test runner with built-in support for coverage reporting.
-5. A live development server that warns about common mistakes.
-6. A build script to bundle JS, CSS, and images for production, with hashes and sourcemaps.
+1. 支持 React、JSX、ES6 和 Flow 语法。
+2. 超越 ES6 的语言额外功能，如对象传播操作者。
+3. 自动前缀的 CSS，所以你不需要 `-webkit-` 或其他前缀。
+4. 一个快速的交互式单元测试运行器，内置支持覆盖率报告。
+5. 一个实时的开发服务器，对常见的错误发出警告。
+6. 一个构建脚本，用于捆绑 JS、CSS 和图片，并提供哈希和源码图。
 
-### 34. What is the lifecycle methods order in mounting?
+### 34. 安装中的生命周期方法的顺序是什么？
 
-The lifecycle methods are called in the following order when an instance of a component is being created and inserted into the DOM.
+当一个组件的实例被创建并插入到 DOM 中时，生命周期方法按以下顺序被调用。
 
 1. `constructor()`
 2. `static getDerivedStateFromProps()`
 3. `render()`
 4. `componentDidMount()`
 
-### 35. What are the lifecycle methods going to be deprecated in React v16?
+### 35. 在 React v16 中，有哪些生命周期方法将被废弃？
 
-The following lifecycle methods going to be unsafe coding practices and will be more problematic with async rendering.
+以下生命周期方法将是不安全的编码做法，在异步渲染中会出现更多问题。
 
 1. `componentWillMount()`
 2. `componentWillReceiveProps()`
 3. `componentWillUpdate()`
 
-Starting with React v16.3 these methods are aliased with `UNSAFE_` prefix, and the unprefixed version will be removed in React v17.
+从 React v16.3 开始，这些方法被别名为 `UNSAFE_` 前缀，未加前缀的版本将在 React v17 中被移除。
 
-### 36. What is the purpose of `getDerivedStateFromProps()` lifecycle method?
+### 36. `getDerivedStateFromProps()` 生命周期方法的目的是什么？
 
-The new static `getDerivedStateFromProps()` lifecycle method is invoked after a component is instantiated as well as before it is re-rendered. It can return an object to update state, or `null` to indicate that the new props do not require any state updates.
+新的静态的 `getDerivedStateFromProps()` 生命周期方法在一个组件实例化后以及重新渲染前被调用。它可以返回一个对象来更新状态，也可以返回 `null` 来表示新的 props 不需要任何状态更新。
 
 ```javascript
 class MyComponent extends React.Component {
@@ -630,11 +630,11 @@ class MyComponent extends React.Component {
 }
 ```
 
-This lifecycle method along with `componentDidUpdate()` covers all the use cases of `componentWillReceiveProps()`.
+这个生命周期方法与 `componentDidUpdate()` 一起涵盖了 `componentWillReceiveProps()` 的所有用例。
 
-### 37. What is the purpose of `getSnapshotBeforeUpdate()` lifecycle method?
+### 37. `getSnapshotBeforeUpdate()` 生命周期方法的目的是什么？
 
-The new `getSnapshotBeforeUpdate()` lifecycle method is called right before DOM updates. The return value from this method will be passed as the third parameter to `componentDidUpdate()`.
+新的 `getSnapshotBeforeUpdate()` 生命周期方法会在 DOM 更新前被调用。这个方法的返回值将作为第三个参数传递给 `componentDidUpdate()`。
 
 ```javascript
 class MyComponent extends React.Component {
@@ -644,17 +644,17 @@ class MyComponent extends React.Component {
 }
 ```
 
-This lifecycle method along with `componentDidUpdate()` covers all the use cases of `componentWillUpdate()`.
+这个生命周期方法与 `componentDidUpdate()` 一起涵盖了 `componentWillUpdate()` 的所有用例。
 
-### 38. Do Hooks replace render props and higher order components?
+### 38. Hooks 是否取代了渲染 props 和高阶组件？
 
-Both render props and higher-order components render only a single child but in most of the cases Hooks are a simpler way to serve this by reducing nesting in your tree.
+渲染 props 和高阶组件都只渲染一个 children，但在大多数情况下，Hooks 是一种更简单的方式，通过减少树中的嵌套来达到这个目的。
 
-### 39. What is the recommended way for naming components?
+### 39. 推荐用什么方式来命名组件？
 
-It is recommended to name the component by reference instead of using `displayName`.
+建议通过引用来命名组件，而不是使用 `displayName`。
 
-Using `displayName` for naming component:
+使用 `displayName` 来命名组件。
 
 ```javascript
 export default React.createClass({
@@ -663,7 +663,7 @@ export default React.createClass({
 });
 ```
 
-The **recommended** approach:
+推荐的方法。
 
 ```javascript
 export default class TodoApp extends React.Component {
@@ -671,11 +671,11 @@ export default class TodoApp extends React.Component {
 }
 ```
 
-### 40. What is the recommended ordering of methods in component class?
+### 40. 建议在组件类中方法的排序是什么？
 
-_Recommended_ ordering of methods from _mounting_ to _render stage_:
+建议从安装到渲染阶段的方法的排序。
 
-1. `static` methods
+1. `static` 方法
 2. `constructor()`
 3. `getChildContext()`
 4. `componentWillMount()`
@@ -685,7 +685,7 @@ _Recommended_ ordering of methods from _mounting_ to _render stage_:
 8. `componentWillUpdate()`
 9. `componentDidUpdate()`
 10. `componentWillUnmount()`
-11. click handlers or event handlers like `onClickSubmit()` or `onChangeDescription()`
-12. getter methods for render like `getSelectReason()` or `getFooterContent()`
-13. optional render methods like `renderNavigation()` or `renderProfilePicture()`
-14. `render()`
+11. 点击处理程序或事件处理程序，如 `onClickSubmit()` 或 `onChangeDescription()`
+12. 渲染的 getter 方法，如 `getSelectReason()` 或 `getFooterContent()`
+13. 可选的渲染方法，如 `renderNavigation()` 或 `renderProfilePicture()`
+14. render()
