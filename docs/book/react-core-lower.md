@@ -3,11 +3,11 @@ title: React 核心下
 order: 3
 ---
 
-### 1. What is a switching component?
+### 1. 什么是切换组件？
 
-A _switching component_ is a component that renders one of many components. We need to use object to map prop values to components.
+切换组件是一个渲染许多组件中的一个组件。我们需要使用对象来将 props 值映射到组件。
 
-For example, a switching component to display different pages based on `page` prop:
+例如，一个切换组件可以根据 `page` props 显示不同的页面。
 
 ```jsx | pure
 import HomePage from './HomePage';
@@ -28,62 +28,60 @@ const Page = props => {
   return <Handler {...props} />;
 };
 
-// The keys of the PAGES object can be used in the prop types to catch dev-time errors.
+// PAGES 对象的键可以在 props 类型中使用，以捕捉开发时间错误。
 Page.propTypes = {
   page: PropTypes.oneOf(Object.keys(PAGES)).isRequired,
 };
 ```
 
-**[⬆ Back to Top](#table-of-contents)**
+### 2. 为什么我们需要向 `setState()` 传递一个函数？
 
-### 2. Why we need to pass a function to setState()?
+这背后的原因是，`setState()` 是一个异步操作。出于性能的考虑，React 会对状态变化进行批处理，所以在调用 `setState()` 后，状态可能不会立即发生变化。这意味着你在调用 `setState()` 时不应该依赖当前的状态，因为你不能确定这个状态会是什么。解决办法是将一个函数传递给 `setState()`，并将之前的状态作为参数。通过这样做，你可以避免由于 `setState()` 的异步性而导致用户在访问时获得旧的状态值的问题。
 
-The reason behind for this is that `setState()` is an asynchronous operation. React batches state changes for performance reasons, so the state may not change immediately after `setState()` is called. That means you should not rely on the current state when calling `setState()` since you can't be sure what that state will be. The solution is to pass a function to `setState()`, with the previous state as an argument. By doing this you can avoid issues with the user getting the old state value on access due to the asynchronous nature of `setState()`.
-
-Let's say the initial count value is zero. After three consecutive increment operations, the value is going to be incremented only by one.
+假设初始计数值为 0。在连续三次递增操作后，该值将只递增一个。
 
 ```javascript
-// assuming this.state.count === 0
+// 假设 this.state.count === 0
 this.setState({ count: this.state.count + 1 });
 this.setState({ count: this.state.count + 1 });
 this.setState({ count: this.state.count + 1 });
-// this.state.count === 1, not 3
+// this.state.count === 1，而不是 3
 ```
 
-If we pass a function to `setState()`, the count gets incremented correctly.
+如果我们给 `setState()` 传递一个函数，计数就会被正确地递增。
 
 ```javascript
 this.setState((prevState, props) => ({
   count: prevState.count + props.increment,
 }));
-// this.state.count === 3 as expected
+// this.state.count === 3
 ```
 
-### 3. Why function is preferred over object for `setState()`?
+### 3. 为什么在 `setState()` 中首选函数而不是对象？
 
-React may batch multiple `setState()` calls into a single update for performance. Because `this.props` and `this.state` may be updated asynchronously, you should not rely on their values for calculating the next state.
+React 可以将多个 `setState()` 的调用批量化为一次更新，以提高性能。因为 `this.props` 和 `this.state` 可能被异步更新，你不应该依赖它们的值来计算下一个状态。
 
-This counter example will fail to update as expected:
+这个计数器的例子将无法按预期更新。
 
 ```javascript
-// Wrong
+// 错误❌
 this.setState({
   counter: this.state.counter + this.props.increment,
 });
 ```
 
-The preferred approach is to call `setState()` with function rather than object. That function will receive the previous state as the first argument, and the props at the time the update is applied as the second argument.
+首选的方法是用函数而不是对象调用 `setState()`。该函数将接收先前的状态作为第一个参数，并将应用更新时的 props 作为第二个参数。
 
 ```javascript
-// Correct
+// 正确✅
 this.setState((prevState, props) => ({
   counter: prevState.counter + props.increment,
 }));
 ```
 
-### 4. What is strict mode in React?
+### 4. React 中的严格模式是什么？
 
-`React.StrictMode` is a useful component for highlighting potential problems in an application. Just like `<Fragment>`, `<StrictMode>` does not render any extra DOM elements. It activates additional checks and warnings for its descendants. These checks apply for _development mode_ only.
+`React.StrictMode` 是一个有用的组件，用于暴露应用程序中的潜在问题。就像 `<Fragment>`，`<StrictMode>`不会渲染任何额外的 DOM 元素。它为其后代激活了额外的检查和警告。这些检查只适用于开发模式。
 
 ```jsx | pure
 import React from 'react';
@@ -104,11 +102,11 @@ function ExampleApplication() {
 }
 ```
 
-In the example above, the _strict mode_ checks apply to `<ComponentOne>` and `<ComponentTwo>` components only.
+在上面的例子中，严格模式检查只适用于 `<ComponentOne>` 和 `<ComponentTwo>` 组件。
 
-### 5. Why is `isMounted()` an anti-pattern and what is the proper solution?
+### 5. 为什么 `isMounted()` 是一个反模式，正确的解决方案是什么？
 
-The primary use case for `isMounted()` is to avoid calling `setState()` after a component has been unmounted, because it will emit a warning.
+`isMounted()` 的主要用例是避免在组件被卸载后调用 `setState()`，因为它会发出警告。
 
 ```javascript
 if (this.isMounted()) {
@@ -116,15 +114,17 @@ if (this.isMounted()) {
 }
 ```
 
-Checking `isMounted()` before calling `setState()` does eliminate the warning, but it also defeats the purpose of the warning. Using `isMounted()` is a code smell because the only reason you would check is because you think you might be holding a reference after the component has unmounted.
+在调用 `setState()` 之前检查 `isMounted()` 确实可以消除警告，但这也违背了警告的目的。使用 `isMounted()` 是一种代码异味，因为你检查的唯一原因是你认为你可能在组件卸载后还持有一个引用。
 
-An optimal solution would be to find places where `setState()` might be called after a component has unmounted, and fix them. Such situations most commonly occur due to callbacks, when a component is waiting for some data and gets unmounted before the data arrives. Ideally, any callbacks should be canceled in `componentWillUnmount()`, prior to unmounting.
+一个最佳的解决方案是找到在组件卸载后可能调用 `setState()` 的地方，并修复它们。这种情况通常是由于回调引起的，当一个组件在等待一些数据时，在数据到达之前被卸载。理想情况下，任何回调都应该在 `componentWillUnmount()` 中取消（在解除挂载之前）。
 
-### 6. What are the Pointer Events supported in React?
+> 代码异味 (Code smell)：程序开发领域，代码中的任何可能导致深层次问题的症状都可以叫做代码异味。 通常，在对代码做简短的反馈迭代时，代码异味会暴露出一些深层次的问题，这里的反馈迭代，是指以一种小范围的、可控的方式重构代码。
 
-_Pointer Events_ provide a unified way of handling all input events. In the old days we had a mouse and respective event listeners to handle them but nowadays we have many devices which don't correlate to having a mouse, like phones with touch surface or pens. We need to remember that these events will only work in browsers that support the _Pointer Events_ specification.
+### 6. React 中支持哪些指针事件？
 
-The following event types are now available in _React DOM_:
+指针事件提供了一个处理所有输入事件的统一方法。在过去，我们有一个鼠标和各自的事件监听器来处理它们，但现在我们有许多设备与拥有鼠标不相关，如带有触摸表面的手机或笔。我们需要记住，这些事件只能在支持 Pointer Events 规范的浏览器中工作。
+
+以下事件类型现在在 React DOM 中可用。
 
 1. `onPointerDown`
 2. `onPointerMove`
@@ -137,17 +137,17 @@ The following event types are now available in _React DOM_:
 9. `onPointerOver`
 10. `onPointerOut`
 
-### 7. Why should component names start with capital letter?
+### 7. 为什么组件名称要以大写字母开头？
 
-If you are rendering your component using JSX, the name of that component has to begin with a capital letter otherwise React will throw an error as unrecognized tag. This convention is because only HTML elements and SVG tags can begin with a lowercase letter.
+如果你使用 JSX 渲染你的组件，该组件的名称必须以大写字母开头，否则 React 将抛出一个错误，即未识别的标签。这个惯例是因为只有 HTML 元素和 SVG 标签可以以小写字母开头。
 
 ```jsx | pure
 class SomeComponent extends Component {
-  // Code goes here
+  // 掘金不止，代码不停
 }
 ```
 
-You can define component class which name starts with lowercase letter, but when it's imported it should have capital letter. Here lowercase is fine:
+你可以定义名称以小写字母开头的组件类，但当它被导入时，它应该是大写字母。在这里，小写就可以了。
 
 ```jsx | pure
 class myComponent extends Component {
@@ -159,17 +159,17 @@ class myComponent extends Component {
 export default myComponent;
 ```
 
-While when imported in another file it should start with capital letter:
+而当导入另一个文件时，它应该以大写字母开始。
 
 ```jsx | pure
 import MyComponent from './MyComponent';
 ```
 
-#### What are the exceptions on React component naming?
+#### 关于 React 组件的命名，有哪些例外情况？
 
-The component names should start with a uppercase letter but there are few exceptions on this convention. The lowercase tag names with a dot (property accessors) are still considered as valid component names.
+组件名称应以大写字母开头，但这一惯例也有少数例外。带点的小写标签名（属性访问器）仍被认为是有效的组件名。
 
-For example the below tag can be compiled to a valid component,
+例如，下面的标签可以被编译成一个有效的组件。
 
 ```jsx | pure
 render(){
@@ -179,70 +179,69 @@ return (
 }
 ```
 
-### 8. Are custom DOM attributes supported in React v16?
+### 8. React v16 中支持自定义 DOM 属性吗？
 
-Yes. In the past, React used to ignore unknown DOM attributes. If you wrote JSX with an attribute that React doesn't recognize, React would just skip it.
+是的，在过去，React 习惯于忽略未知的 DOM 属性。如果你写的 JSX 有一个 React 不认识的属性，React 会直接跳过它。
 
-For example, let's take a look at the below attribute:
+例如，让我们看一下下面的属性。
 
 ```jsx | pure
 <div mycustomattribute={'something'} />
 ```
 
-Would render an empty div to the DOM with React v15:
+用 React v15 渲染一个空的 div 到 DOM 上。
 
 ```html
 <div />
 ```
-
-In React v16 any unknown attributes will end up in the DOM:
+在 React v16 中，任何未知的属性最终都会出现在 DOM 中。
 
 ```html
 <div mycustomattribute="something" />
 ```
 
-This is useful for supplying browser-specific non-standard attributes, trying new DOM APIs, and integrating with opinionated third-party libraries.
+这对于提供浏览器特定的非标准属性，尝试新的 DOM API，以及与有主见的第三方库集成是非常有用的。
 
-### 9. What is the difference between constructor and getInitialState?
+### 9. constructor 和 getInitialState 的区别是什么？
 
-You should initialize state in the constructor when using ES6 classes, and `getInitialState()` method when using `React.createClass()`.
+当使用 ES6 类时，你应该在构造函数中初始化状态，而当使用 `React.createClass()` 时，应该在 `getInitialState()` 方法中初始化状态。
 
-**Using ES6 classes:**
+**使用 ES6 类：**
 
 ```javascript
 class MyComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      /* initial state */
+      /* 初始化状态 */
     };
   }
 }
 ```
 
-**Using `React.createClass()`:**
+**使用 `React.createClass()`：**
 
 ```javascript
 const MyComponent = React.createClass({
   getInitialState() {
     return {
-      /* initial state */
+      /* 初始化状态 */
     };
   },
 });
 ```
 
-**Note:** `React.createClass()` is deprecated and removed in React v16. Use plain JavaScript classes instead.
+**注意：** `React.createClass()` 在 React v16 中已被废弃并删除。请使用普通的 JavaScript 类来代替。
 
-### 10. Can you force a component to re-render without calling setState?
+### 10. 你能在不调用 setState 的情况下强制一个组件重新渲染吗？
 
-By default, when your component's state or props change, your component will re-render. If your `render()` method depends on some other data, you can tell React that the component needs re-rendering by calling `forceUpdate()`.
+默认情况下，当你的组件的状态或 props 改变时，你的组件会重新渲染。如果你的 `render()` 方法依赖于其他数据，你可以通过调用 `forceUpdate()` 告诉 React 该组件需要重新渲染。
 
 ```javascript
 component.forceUpdate(callback);
 ```
 
-It is recommended to avoid all uses of `forceUpdate()` and only read from `this.props` and `this.state` in `render()`.
+建议避免使用 `forceUpdate()`，只在 `render()` 中读取`this.props` 和 `this.state`。
 
 ### 11. What is the difference between `super()` and `super(props)` in React using ES6 classes?
 
