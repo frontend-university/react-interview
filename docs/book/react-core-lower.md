@@ -243,11 +243,11 @@ component.forceUpdate(callback);
 
 建议避免使用 `forceUpdate()`，只在 `render()` 中读取`this.props` 和 `this.state`。
 
-### 11. What is the difference between `super()` and `super(props)` in React using ES6 classes?
+### 11. 在  React 中使用 ES6 类的，`super()` 和 `super(props)` 之间有什么区别？
 
-When you want to access `this.props` in `constructor()` then you should pass props to `super()` method.
+当你想在 `constructor()` 中访问 `this.props` 时，你应该把 props 传给 `super()` 方法。
 
-**Using `super(props)`:**
+**使用 `super(props)`：**
 
 ```javascript
 class MyComponent extends React.Component {
@@ -258,7 +258,7 @@ class MyComponent extends React.Component {
 }
 ```
 
-**Using `super()`:**
+**使用 `super()`：**
 
 ```javascript
 class MyComponent extends React.Component {
@@ -269,13 +269,13 @@ class MyComponent extends React.Component {
 }
 ```
 
-Outside `constructor()` both will display same value for `this.props`.
+在 `constructor()` 之外，两者都会显示相同的 `this.props` 的值。
 
-### 12. How to loop inside JSX?
+### 12. 如何在 JSX 内循环？
 
-You can simply use `Array.prototype.map` with ES6 _arrow function_ syntax.
+你可以简单地使用 `Array.prototype.map` 与 ES6 箭头函数语法。
 
-For example, the `items` array of objects is mapped into an array of components:
+例如，对象的 `items` 数组被映射成组件的数组。
 
 ```jsx | pure
 <tbody>
@@ -285,7 +285,7 @@ For example, the `items` array of objects is mapped into an array of components:
 </tbody>
 ```
 
-But you can't iterate using `for` loop:
+但你不能用 `for` 循环来迭代。
 
 ```jsx | pure
 <tbody>
@@ -295,31 +295,31 @@ for (let i = 0; i < items.length; i++) {
 </tbody>
 ```
 
-This is because JSX tags are transpiled into _function calls_, and you can't use statements inside expressions. This may change thanks to `do` expressions which are _stage 1 proposal_.
+这是因为 JSX 标签被转换为函数调用，而且你不能在表达式中使用语句。这可能会改变，因为 `do` 表达式是第一阶段的建议。
 
-### 13. How do you access props in attribute quotes?
+### 13. 你如何在属性引号中访问 props？
 
-React (or JSX) doesn't support variable interpolation inside an attribute value. The below representation won't work:
+React（或 JSX）不支持属性值内的变量插值。下面的表示方法就不能用了。
 
 ```jsx | pure
 <img className="image" src="images/{this.props.image}" />
 ```
 
-But you can put any JS expression inside curly braces as the entire attribute value. So the below expression works:
+但你可以把任何 JS 表达式放在大括号内作为整个属性值。所以下面的表达式是有效的。
 
 ```jsx | pure
 <img className="image" src={'images/' + this.props.image} />
 ```
 
-Using _template strings_ will also work:
+使用模板字符串也可以。
 
 ```jsx | pure
 <img className="image" src={`images/${this.props.image}`} />
 ```
 
-### 14. What is React proptype array with shape?
+### 14. 什么是带 shape 的 React 原型数组？
 
-If you want to pass an array of objects to a component with a particular shape then use `React.PropTypes.shape()` as an argument to `React.PropTypes.arrayOf()`.
+如果你想把一个对象数组传递给一个具有特定 shape 的组件，那么使用 `React.PropTypes.shape()` 作为 `React.PropTypes.arrayOf()` 的一个参数。
 
 ```javascript
 ReactComponent.propTypes = {
@@ -332,55 +332,55 @@ ReactComponent.propTypes = {
 };
 ```
 
-### 15. How to conditionally apply class attributes?
+### 15. 如何有条件地应用类属性？
 
-You shouldn't use curly braces inside quotes because it is going to be evaluated as a string.
+你不应该在引号内使用大括号，因为它将被计算为一个字符串。
 
 ```jsx | pure
 <div className="btn-panel {this.props.visible ? 'show' : 'hidden'}">
 ```
 
-Instead you need to move curly braces outside (don't forget to include spaces between class names):
+相反，你需要把大括号移到外面（别忘了在类名之间包括空格）。
 
 ```jsx | pure
 <div className={'btn-panel ' + (this.props.visible ? 'show' : 'hidden')}>
 ```
 
-_Template strings_ will also work:
+模板字符串也可以使用。
 
 ```jsx | pure
 <div className={`btn-panel ${this.props.visible ? 'show' : 'hidden'}`}>
 ```
 
-### 16. What is the difference between React and ReactDOM?
+### 16. React 和 ReactDOM 之间有什么区别？
 
-The `react` package contains `React.createElement()`, `React.Component`, `React.Children`, and other helpers related to elements and component classes. You can think of these as the isomorphic or universal helpers that you need to build components. The `react-dom` package contains `ReactDOM.render()`, and in `react-dom/server` we have _server-side rendering_ support with `ReactDOMServer.renderToString()` and `ReactDOMServer.renderToStaticMarkup()`.
+`react` 包包含 `React.createElement()`、`React.Component`、`React.Children`, 以及其他与元素和组件类相关的帮助函数。你可以把这些看作是你构建组件所需要的同构或通用助手。`react-dom` 包包含 `ReactDOM.render()`，在 `react-dom/server` 中，我们有 `ReactDOMServer.renderToString()` 和 `ReactDOMServer.renderToStaticMarkup()` 的服务器端渲染支持。
 
-### 17. Why ReactDOM is separated from React?
+### 17. 为什么 ReactDOM 要从 React 中分离出来？
 
-The React team worked on extracting all DOM-related features into a separate library called _ReactDOM_. React v0.14 is the first release in which the libraries are split. By looking at some of the packages, `react-native`, `react-art`, `react-canvas`, and `react-three`, it has become clear that the beauty and essence of React has nothing to do with browsers or the DOM.
+React 团队致力于将所有与 DOM 相关的功能提取到一个单独的库中，称为 ReactDOM。React v0.14 是第一个分割库的版本。通过查看一些包，`react-native`、`react-art`、`react-canvas`和 `react-three`，已经很清楚，React 的优秀和本质与浏览器或 DOM 无关。
 
-To build more environments that React can render to, React team planned to split the main React package into two: `react` and `react-dom`. This paves the way to writing components that can be shared between the web version of React and React Native.
+为了建立更多 React 可以渲染的环境，React 团队计划将主 React 包分成两个：`react` 和 `react-dom`。这就为编写可以在网络版 React 和 React Native 之间共享的组件铺平了道路。
 
-### 18. How to use React label element?
+### 18. 如何使用 React label 元素？
 
-If you try to render a `<label>` element bound to a text input using the standard `for` attribute, then it produces HTML missing that attribute and prints a warning to the console.
+如果你试图用标准的 `for` 属性渲染一个绑定在文本输入上的 `<label>` 元素，那么它产生的 HTML 会缺少该属性，并在控制台打印出警告。
 
 ```jsx | pure
 <label for={'user'}>{'User'}</label>
 <input type={'text'} id={'user'} />
 ```
 
-Since `for` is a reserved keyword in JavaScript, use `htmlFor` instead.
+由于 `for` 在 JavaScript 中是一个保留关键字，我们可以使用 `htmlFor` 代替。
 
 ```jsx | pure
 <label htmlFor={'user'}>{'User'}</label>
 <input type={'text'} id={'user'} />
 ```
 
-### 19. How to combine multiple inline style objects?
+### 19. 如何组合多个内联样式对象？
 
-You can use _spread operator_ in regular React:
+你可以在常规 React 中使用展开语法。
 
 ```jsx | pure
 <button style={{ ...styles.panel.button, ...styles.panel.submitButton }}>
@@ -388,7 +388,7 @@ You can use _spread operator_ in regular React:
 </button>
 ```
 
-If you're using React Native then you can use the array notation:
+如果你使用的是 React Native，那么你可以使用数组符号。
 
 ```jsx | pure
 <button style={[styles.panel.button, styles.panel.submitButton]}>
@@ -396,16 +396,12 @@ If you're using React Native then you can use the array notation:
 </button>
 ```
 
-### 20. How to re-render the view when the browser is resized?
+### 20. 如何在浏览器调整大小时重新渲染视图？
 
-You can listen to the `resize` event in `componentDidMount()` and then update the dimensions (`width` and `height`). You should remove the listener in `componentWillUnmount()` method.
+你可以在 `componentDidMount()` 中监听 `resize` 事件，然后更新尺寸（`width` 和 `height`）。你应该在 `componentWillUnmount()` 方法中移除监听器。
 
-```javascript
+```jsx | pure
 class WindowDimensions extends React.Component {
-  constructor(props) {
-    super(props);
-    this.updateDimensions = this.updateDimensions.bind(this);
-  }
 
   componentWillMount() {
     this.updateDimensions();
@@ -419,7 +415,7 @@ class WindowDimensions extends React.Component {
     window.removeEventListener('resize', this.updateDimensions);
   }
 
-  updateDimensions() {
+  updateDimensions = () => {
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
 
