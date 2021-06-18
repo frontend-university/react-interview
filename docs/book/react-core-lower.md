@@ -429,25 +429,25 @@ class WindowDimensions extends React.Component {
 }
 ```
 
-### 21. What is the difference between `setState()` and `replaceState()` methods?
+### 21. `setState()` 和 `replaceState()` 方法之间的区别是什么？
 
-When you use `setState()` the current and previous states are merged. `replaceState()` throws out the current state, and replaces it with only what you provide. Usually `setState()` is used unless you really need to remove all previous keys for some reason. You can also set state to `false`/`null` in `setState()` instead of using `replaceState()`.
+当你使用 `setState()` 时，当前和之前的状态被合并。 `replaceState()` 抛出当前的状态，只用你提供的内容来替换它。通常 `setState()` 会被使用，除非你真的因为某些原因需要删除所有之前的键。你也可以在 `setState()` 中把状态设置为 `false`/`null`，而不是使用 `replaceState()`。
 
-### 22. How to listen to state changes?
+### 22. 如何监听状态变化？
 
-The `componentDidUpdate` lifecycle method will be called when state changes. You can compare provided state and props values with current state and props to determine if something meaningful changed.
+当状态发生变化时，`componentDidUpdate` 生命周期方法将被调用。你可以将提供的状态和 props 值与当前的状态和 props 进行比较，以确定是否有意义的变化。
 
 ```
 componentDidUpdate(object prevProps, object prevState)
 ```
 
-**Note:** The previous releases of ReactJS also uses `componentWillUpdate(object nextProps, object nextState)` for state changes. It has been deprecated in latest releases.
+**注意：** 以前的 ReactJS 版本也使用 `componentWillUpdate(object nextProps, object nextState)` 监听状态改变。在最新的版本中，它已被弃用。
 
-### 23. What is the recommended approach of removing an array element in React state?
+### 23. 在 React 状态下，删除数组元素的推荐方法是什么？
 
-The better approach is to use `Array.prototype.filter()` method.
+更好的方法是使用 `Array.prototype.filter()` 方法。
 
-For example, let's create a `removeItem()` method for updating the state.
+例如，让我们创建一个 `removeItem()` 方法来更新状态。
 
 ```javascript
 removeItem(index) {
@@ -457,9 +457,9 @@ removeItem(index) {
 }
 ```
 
-### 24. Is it possible to use React without rendering HTML?
+### 24. 有没有可能在不渲染 HTML 的情况下使用 React 呢？
 
-It is possible with latest version (>=16.2). Below are the possible options:
+在最新版本（>=16.2）中可以实现。以下是可用选项。
 
 ```jsx | pure
 render() {
@@ -491,11 +491,11 @@ render() {
 }
 ```
 
-Returning `undefined` won't work.
+返回 `undefined` 是不行的。
 
-### 25. How to pretty print JSON with React?
+### 25. 如何用 React 打印漂亮的 JSON？
 
-We can use `<pre>` tag so that the formatting of the `JSON.stringify()` is retained:
+我们可以使用 `<pre>` 标签，这样可以保留 `JSON.stringify()` 的格式。
 
 ```jsx | pure
 const data = { name: 'John', age: 42 };
@@ -509,18 +509,20 @@ class User extends React.Component {
 React.render(<User />, document.getElementById('container'));
 ```
 
-### 26. Why you can't update props in React?
+### 26. 为什么你不能在 React 中更新 props？
 
-The React philosophy is that props should be _immutable_ and _top-down_. This means that a parent can send any prop values to a child, but the child can't modify received props.
+React 的理念是，props 应该是**不可变的**和**自上而下**的。这意味着父组件可以向子组件发送任何 props 值，但子组件不能修改收到的 props。
 
-### 27. How to focus an input element on page load?
+### 27. 如何在页面加载时聚焦一个输入框？
 
-You can do it by creating _ref_ for `input` element and using it in `componentDidMount()`:
+你可以通过为 `input` 元素创建 ref 并在 `componentDidMount()` 中使用它。
 
 ```jsx | pure
 class App extends React.Component {
   componentDidMount() {
-    this.nameInput.focus();
+    if (this.nameInput) {
+      this.nameInput.focus();
+    }
   }
 
   render() {
@@ -539,25 +541,25 @@ class App extends React.Component {
 ReactDOM.render(<App />, document.getElementById('app'));
 ```
 
-### 28. What are the possible ways of updating objects in state?
+### 28. 更新状态中的对象的方式有哪些？
 
-1. **Calling `setState()` with an object to merge with state:**
+1. **合并状态和对象后调用 `setState()`：**
 
-- Using `Object.assign()` to create a copy of the object:
+- 使用 `Object.assign()` 创建对象的拷贝：
 
 ```javascript
 const user = Object.assign({}, this.state.user, { age: 42 });
 this.setState({ user });
 ```
 
-- Using _spread operator_:
+- 使用展开操作符：
 
 ```javascript
 const user = { ...this.state.user, age: 42 };
 this.setState({ user });
 ```
 
-2. **Calling `setState()` with a function:**
+2. **调用 `setState()` 时传入函数：**
 
 ```javascript
 this.setState(prevState => ({
@@ -568,9 +570,9 @@ this.setState(prevState => ({
 }));
 ```
 
-### 29. How can we find the version of React at runtime in the browser?
+### 29. 我们如何在浏览器中查看运行时的 React 的版本？
 
-You can use `React.version` to get the version.
+你可以使用 `React.version` 来获取版本。
 
 ```jsx | pure
 const REACT_VERSION = React.version;
@@ -581,13 +583,13 @@ ReactDOM.render(
 );
 ```
 
-### 30. What are the approaches to include polyfills in your `create-react-app`?
+### 30. 在 `create-react-app` 中包含 polyfills 的方法是什么？
 
-There are approaches to include polyfills in create-react-app,
+有一些方法可以在 create-react-app 中包含 polyfills。
 
-1. **Manual import from `core-js`:**
+1. **手动从 `core-js` 引入：**
 
-Create a file called (something like) `polyfills.js` and import it into root `index.js` file. Run `npm install core-js` or `yarn add core-js` and import your specific required features.
+创建一个名为（类似）`polyfills.js` 的文件并将其导入根 `index.js` 文件。运行 `npm install core-js` 或 `yarn add core-js` 并导入你所需要的特定功能。
 
 ```javascript
 import 'core-js/fn/array/find';
@@ -595,15 +597,15 @@ import 'core-js/fn/array/includes';
 import 'core-js/fn/number/is-nan';
 ```
 
-2. **Using Polyfill service:**
+2. **使用 Polyfill 服务：**
 
-Use the polyfill.io CDN to retrieve custom, browser-specific polyfills by adding this line to `index.html`:
+使用 polyfill.io CDN，通过在 `index.html` 中添加这一行来检索自定义的、针对浏览器的 polyfills。
 
 ```html
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.includes"></script>
 ```
 
-In the above script we had to explicitly request the `Array.prototype.includes` feature as it is not included in the default feature set.
+在上面的脚本中，我们必须明确请求 `Array.prototype.includes` 功能，因为它不包括在默认功能集中。
 
 ### 31. How to use https instead of http in create-react-app?
 
