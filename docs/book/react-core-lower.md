@@ -607,9 +607,9 @@ import 'core-js/fn/number/is-nan';
 
 在上面的脚本中，我们必须明确请求 `Array.prototype.includes` 功能，因为它不包括在默认功能集中。
 
-### 31. How to use https instead of http in create-react-app?
+### 31. 如何在 create-react-app 中使用 https 而不是 http？
 
-You just need to use `HTTPS=true` configuration. You can edit your `package.json` scripts section:
+你只需要是用 `HTTPS=true` 配置。你可以编辑 `package.json` scripts 部分：
 
 ```json
 "scripts": {
@@ -617,21 +617,21 @@ You just need to use `HTTPS=true` configuration. You can edit your `package.json
 }
 ```
 
-or just run `set HTTPS=true && npm start`
+或者运行 `set HTTPS=true && npm start`
 
-### 32. How to avoid using relative path imports in create-react-app?
+### 32. 如何避免在 create-react-app 中使用相对路径导入？
 
-Create a file called `.env` in the project root and write the import path:
+在项目里根目录创建一个叫 `.env` 的文件并写入导入的路径：
 
 ```
 NODE_PATH=src/app
 ```
 
-After that restart the development server. Now you should be able to import anything inside `src/app` without relative paths.
+然后重启调试服务器。现在你应该能够在 `src/app` 目录下不使用相对路径导入任何东西。
 
-### 33. How to add Google Analytics for React Router?
+### 33. 如何在 React Router 中添加 Google Analytics？
 
-Add a listener on the `history` object to record each page view:
+在 `history` 对象上添加一个监听器，以记录每个页面的浏览。
 
 ```javascript
 history.listen(function(location) {
@@ -640,9 +640,9 @@ history.listen(function(location) {
 });
 ```
 
-### 34. How to update a component every second?
+### 34. 如何每秒更新一次组件？
 
-You need to use `setInterval()` to trigger the change, but you also need to clear the timer when the component unmounts to prevent errors and memory leaks.
+你需要使用 `setInterval()` 来触发变化，但你也需要在组件卸载时清除计时器以防止错误和内存泄漏。
 
 ```javascript
 componentDidMount() {
@@ -654,23 +654,23 @@ componentWillUnmount() {
 }
 ```
 
-### 35. How do you apply vendor prefixes to inline styles in React?
+### 35. 如何在 React 中对内联样式使用 CSS 厂商前缀？
 
-React _does not_ apply _vendor prefixes_ automatically. You need to add vendor prefixes manually.
+React 不会自动应用 CSS 厂商前缀。你需要手动添加 CSS 厂商前缀。
 
 ```jsx | pure
 <div
   style={{
     transform: 'rotate(90deg)',
-    WebkitTransform: 'rotate(90deg)', // note the capital 'W' here
-    msTransform: 'rotate(90deg)', // 'ms' is the only lowercase vendor prefix
+    WebkitTransform: 'rotate(90deg)', // 注意大写 'W'
+    msTransform: 'rotate(90deg)', // 'ms' 是全小写
   }}
 />
 ```
 
-### 36. How to import and export components using React and ES6?
+### 36. 如何使用 React 和 ES6 导入和导出组件？
 
-You should use default for exporting the components
+你应该使用默认值来导出组件
 
 ```jsx | pure
 import React from 'react';
@@ -683,15 +683,15 @@ export default class MyProfile extends React.Component {
 }
 ```
 
-With the export specifier, the MyProfile is going to be the member and exported to this module and the same can be imported without mentioning the name in other components.
+有了导出指定符，MyProfile 将成为成员并导出到这个模块，同样可以在其他组件中导入而不提及名称。
 
-### 37. Why is a component constructor called only once?
+### 37. 为什么组件构造器只会被调用一次？
 
-React's _reconciliation_ algorithm assumes that without any information to the contrary, if a custom component appears in the same place on subsequent renders, it's the same component as before, so reuses the previous instance rather than creating a new one.
+React 的 reconciliation（协调） 算法假定，在没有任何相反信息的情况下，如果一个自定义组件在随后的渲染中出现在相同的地方，它就是之前的那个组件，所以 React 重用之前的实例而不是创建一个新的。
 
-### 38. How to define constants in React?
+### 38. 如何在 React 中定义常量？
 
-You can use ES7 `static` field to define constant.
+你可以使用 ES7 的 `静态` 字段来定义常量。
 
 ```javascript
 class MyComponent extends React.Component {
@@ -699,29 +699,29 @@ class MyComponent extends React.Component {
 }
 ```
 
-_Static fields_ are part of the _Class Fields_ stage 3 proposal.
+静态字段是类字段第三阶段提案的一部分。
 
-### 39. How to programmatically trigger click event in React?
+### 39. 如何在 React 中以编程方式触发点击事件？
 
-You could use the ref prop to acquire a reference to the underlying `HTMLInputElement` object through a callback, store the reference as a class property, then use that reference to later trigger a click from your event handlers using the `HTMLElement.click` method.
+你可以使用 ref props 通过回调获得对底层 `HTMLInputElement` 对象的引用，将该引用存储为类属性，然后使用该引用从事件处理程序中使用 `HTMLElement.click` 方法触发点击。
 
-This can be done in two steps:
+这可以分两步进行。
 
-1. Create ref in render method:
+1. 在 render 方法中创建 ref：
 
 ```jsx | pure
 <input ref={input => (this.inputElement = input)} />
 ```
 
-2. Apply click event in your event handler:
+2. 在你的事件处理程序中应用点击事件。
 
 ```javascript
 this.inputElement.click();
 ```
 
-### 40. Is it possible to use async/await in plain React?
+### 40. 有可能在纯 React 中使用 async/await 吗？
 
-If you want to use `async`/`await` in React, you will need _Babel_ and [transform-async-to-generator](https://babeljs.io/docs/en/babel-plugin-transform-async-to-generator) plugin. React Native ships with Babel and a set of transforms.
+如果你想在 React 中使用 `async`/`await`，你将需要 Babel 和 [transform-async-to-generator](https://babeljs.io/docs/en/babel-plugin-transform-async-to-generator) 插件。React Native 已经包含了 Babel 和一系列的转换功能。
 
 ### 41. What are the common folder structures for React?
 
