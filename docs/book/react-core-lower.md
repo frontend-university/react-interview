@@ -723,13 +723,13 @@ this.inputElement.click();
 
 如果你想在 React 中使用 `async`/`await`，你将需要 Babel 和 [transform-async-to-generator](https://babeljs.io/docs/en/babel-plugin-transform-async-to-generator) 插件。React Native 已经包含了 Babel 和一系列的转换功能。
 
-### 41. What are the common folder structures for React?
+### 41. React 的常见文件夹结构是什么？
 
-There are two common practices for React project file structure.
+React 项目文件结构有两种常见做法。
 
-1. **Grouping by features or routes:**
+1. **按特性或路由分组：***
 
-One common way to structure projects is locate CSS, JS, and tests together, grouped by feature or route.
+一种常见的项目结构方式是将 CSS、JS 和测试放在一起，按特性或路由分组。
 
 ```
 common/
@@ -752,9 +752,9 @@ profile/
 └─ ProfileAPI.js
 ```
 
-2. **Grouping by file type:**
+2. **按文件类型分组：**
 
-Another popular way to structure projects is to group similar files together.
+另一种流行的项目结构方式是将类似的文件分组。
 
 ```
 api/
@@ -774,15 +774,15 @@ components/
 └─ ProfileHeader.css
 ```
 
-### 42. What are the popular packages for animation?
+### 42. 有哪些流行的动画包？
 
-_React Transition Group_ and _React Motion_ are popular animation packages in React ecosystem.
+React Transition Group 和 React Motion 是 React 生态系统中流行的动画包。
 
-### 43. What is the benefit of styles modules?
+### 43. 样式模块的好处是什么？
 
-It is recommended to avoid hard coding style values in components. Any values that are likely to be used across different UI components should be extracted into their own modules.
+我们建议避免在组件中硬编码样式值。任何可能在不同的 UI 组件中使用的值都应该被提取到它们自己的模块中。
 
-For example, these styles could be extracted into a separate component:
+例如，这些样式可以被提取到一个单独的组件中。
 
 ```javascript
 export const colors = {
@@ -794,23 +794,23 @@ export const colors = {
 export const space = [0, 8, 16, 32, 64];
 ```
 
-And then imported individually in other components:
+然后在其他组件中单独导入。
 
 ```javascript
 import { space, colors } from './styles';
 ```
 
-### 44. What are the popular React-specific linters?
+### 44. 有哪些流行的 React 专用 linter？
 
-ESLint is a popular JavaScript linter. There are plugins available that analyse specific code styles. One of the most common for React is an npm package called `eslint-plugin-react`. By default, it will check a number of best practices, with rules checking things from keys in iterators to a complete set of prop types.
+ESLint 是一个很流行的 JavaScript linter。有一些插件可以用来分析特定的代码风格。其中最常见的 React 插件是一个名为 `eslint-plugin-react` 的 npm 包。默认情况下，它将检查一些最佳实践，其规则是检查从迭代器中的键到一整套道具类型的东西。
 
-Another popular plugin is `eslint-plugin-jsx-a11y`, which will help fix common issues with accessibility. As JSX offers slightly different syntax to regular HTML, issues with `alt` text and `tabindex`, for example, will not be picked up by regular plugins.
+另一个流行的插件是 `eslint-plugin-jsx-a11y`，它将帮助修复可访问性方面的常见问题。由于 JSX 提供了与常规 HTML 稍有不同的语法，例如 `alt` 文本和 `tabindex` 的问题将不会被常规插件发现。
 
-### 45. How to make AJAX call and in which component lifecycle methods should I make an AJAX call?
+### 45. 如何进行 AJAX 调用，应该在哪个组件的生命周期方法中进行 AJAX 调用？
 
-You can use AJAX libraries such as Axios, jQuery AJAX, and the browser built-in `fetch`. You should fetch data in the `componentDidMount()` lifecycle method. This is so you can use `setState()` to update your component when the data is retrieved.
+你可以使用 AJAX 库，如 Axios、jQuery AJAX，以及浏览器内置的 `fetch`。你应该在 `componentDidMount()` 生命周期方法中获取数据。这样你就可以在获取数据时使用 `setState()` 来更新你的组件。
 
-For example, the employees list fetched from API and set local state:
+例如，从 API 获取的雇员名单并设置本地状态。
 
 ```jsx | pure
 class MyComponent extends React.Component {
@@ -856,12 +856,12 @@ class MyComponent extends React.Component {
 }
 ```
 
-### 46. What are render props?
+### 46. 什么是渲染 props？
 
-**Render Props** is a simple technique for sharing code between components using a prop whose value is a function. The below component uses render prop which returns a React element.
+**渲染 props**是一种简单的技术，使用一个 props 在组件之间共享代码，其值是一个函数。下面的组件使用渲染 props，它返回一个 React 元素。
 
 ```jsx | pure
 <DataProvider render={data => <h1>{`Hello ${data.target}`}</h1>} />
 ```
 
-Libraries such as React Router and DownShift are using this pattern.
+React Router 和 DownShift 等库正在使用这种模式。
