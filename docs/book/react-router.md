@@ -21,7 +21,7 @@ React Router v4 提供以下 3 个 `<Router>` 组件。
 
 上述组件将创建*browser*、*hash*和*memory*历史实例。React Router v4 使与你的路由相关的 `history` 实例的属性和方法通过 `router` 对象中的上下文可用。
 
-## 4. `history` 的 `push()` 和 `replace() ` 方法的用处是什么？
+## 4. `history` 的 `push()` 和 `replace()` 方法的用处是什么？
 
 一个 history 实例有两个方法用于导航。
 
@@ -39,16 +39,18 @@ There are three different ways to achieve programmatic routing/navigation within
 The `withRouter()` higher-order function will inject the history object as a prop of the component. This object provides `push()` and `replace()` methods to avoid the usage of context.
 
 ```jsx | pure
-import { withRouter } from 'react-router-dom' // this also works with 'react-router-native'
+import { withRouter } from 'react-router-dom'; // this also works with 'react-router-native'
 
 const Button = withRouter(({ history }) => (
   <button
-    type='button'
-    onClick={() => { history.push('/new-location') }}
+    type="button"
+    onClick={() => {
+      history.push('/new-location');
+    }}
   >
     {'Click Me!'}
   </button>
-))
+));
 ```
 
 2. **Using `<Route>` component and render props pattern:**
@@ -56,18 +58,22 @@ const Button = withRouter(({ history }) => (
 The `<Route>` component passes the same props as `withRouter()`, so you will be able to access the history methods through the history prop.
 
 ```jsx | pure
-import { Route } from 'react-router-dom'
+import { Route } from 'react-router-dom';
 
 const Button = () => (
-  <Route render={({ history }) => (
-    <button
-      type='button'
-      onClick={() => { history.push('/new-location') }}
-    >
-      {'Click Me!'}
-    </button>
-  )} />
-)
+  <Route
+    render={({ history }) => (
+      <button
+        type="button"
+        onClick={() => {
+          history.push('/new-location');
+        }}
+      >
+        {'Click Me!'}
+      </button>
+    )}
+  />
+);
 ```
 
 3. **Using context:**
@@ -77,20 +83,20 @@ This option is not recommended and treated as unstable API.
 ```jsx | pure
 const Button = (props, context) => (
   <button
-    type='button'
+    type="button"
     onClick={() => {
-      context.history.push('/new-location')
+      context.history.push('/new-location');
     }}
   >
     {'Click Me!'}
   </button>
-)
+);
 
 Button.contextTypes = {
   history: React.PropTypes.shape({
-    push: React.PropTypes.func.isRequired
-  })
-}
+    push: React.PropTypes.func.isRequired,
+  }),
+};
 ```
 
 ## 6. 如何在 React Router v4 中获取查询参数？
@@ -105,11 +111,11 @@ const parsed = queryString.parse(props.location.search);
 You can also use `URLSearchParams` if you want something native:
 
 ```javascript
-const params = new URLSearchParams(props.location.search)
-const foo = params.get('name')
+const params = new URLSearchParams(props.location.search);
+const foo = params.get('name');
 ```
 
-You should use a *polyfill* for IE11.
+You should use a _polyfill_ for IE11.
 
 ## 7. 为什么你得到 `Router may have only one child element` 的警告？
 
@@ -118,7 +124,7 @@ You have to wrap your Route's in a `<Switch>` block because `<Switch>` is unique
 At first you need to add `Switch` to your imports:
 
 ```javascript
-import { Switch, Router, Route } from 'react-router'
+import { Switch, Router, Route } from 'react-router';
 ```
 
 Then define the routes within `<Switch>` block:
@@ -140,22 +146,22 @@ While navigating you can pass props to the `history` object:
 this.props.history.push({
   pathname: '/template',
   search: '?name=sudheer',
-  state: { detail: response.data }
-})
+  state: { detail: response.data },
+});
 ```
 
 The `search` property is used to pass query params in `push()` method.
 
-## 9. 如何实现 *default* 或 *NotFound* 页面？
+## 9. 如何实现 _default_ 或 _NotFound_ 页面？
 
 A `<Switch>` renders the first child `<Route>` that matches. A `<Route>` with no path always matches. So you just need to simply drop path attribute as below
 
-```jsx harmony
+```jsx | pure
 <Switch>
-  <Route exact path="/" component={Home}/>
-  <Route path="/user" component={User}/>
+  <Route exact path="/" component={Home} />
+  <Route path="/user" component={User} />
   <Route component={NotFound} />
-</Switch>s
+</Switch>
 ```
 
 ## 10. 如何在 React Router v4 上获得历史记录？
@@ -167,34 +173,35 @@ Below are the list of steps to get history object on React Router v4,
 For example, create `history.js` file:
 
 ```javascript
-import { createBrowserHistory } from 'history'
+import { createBrowserHistory } from 'history';
 
 export default createBrowserHistory({
   /* pass a configuration object here if needed */
-})
+});
 ```
 
 2. You should use the `<Router>` component instead of built-in routers. Imported the above `history.js` inside `index.js` file:
 
 ```jsx | pure
-import { Router } from 'react-router-dom'
-import history from './history'
-import App from './App'
+import { Router } from 'react-router-dom';
+import history from './history';
+import App from './App';
 
-ReactDOM.render((
+ReactDOM.render(
   <Router history={history}>
     <App />
-  </Router>
-), holder)
+  </Router>,
+  holder,
+);
 ```
 
 3. You can also use push method of `history` object similar to built-in history object:
 
 ```javascript
 // some-other-file.js
-import history from './history'
+import history from './history';
 
-history.push('/go-here')
+history.push('/go-here');
 ```
 
 ## 11. 如何在登录后执行自动重定向？
@@ -202,15 +209,15 @@ history.push('/go-here')
 The `react-router` package provides `<Redirect>` component in React Router. Rendering a `<Redirect>` will navigate to a new location. Like server-side redirects, the new location will override the current location in the history stack.
 
 ```javascript
-import React, { Component } from 'react'
-import { Redirect } from 'react-router'
+import React, { Component } from 'react';
+import { Redirect } from 'react-router';
 
 export default class LoginComponent extends Component {
   render() {
     if (this.state.isLoggedIn === true) {
-      return <Redirect to="/your/redirect/page" />
+      return <Redirect to="/your/redirect/page" />;
     } else {
-      return <div>{'Login Please'}</div>
+      return <div>{'Login Please'}</div>;
     }
   }
 }
